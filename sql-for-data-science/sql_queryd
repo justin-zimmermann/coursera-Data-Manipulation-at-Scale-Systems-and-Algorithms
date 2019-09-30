@@ -1,0 +1,7 @@
+SELECT COUNT(*)
+FROM (
+	SELECT DISTINCT f.docid
+	FROM frequency f
+	WHERE f.term = 'law'
+	OR f.term = 'legal'
+	) X;

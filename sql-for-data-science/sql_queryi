@@ -1,0 +1,30 @@
+SELECT Y.simscore
+FROM (
+	SELECT SUM(X.av * X.bv) as simscore, X.ar as docid1, X.br as docid2
+	FROM (
+		SELECT a.count AS av, a.docid AS ar, a.term AS ac, b.count AS bv, b.docid AS br, b.term AS bc
+		FROM (
+			SELECT * FROM frequency
+			UNION
+			SELECT 'q' as docid, 'washington' as term, 1 as count 
+			UNION
+			SELECT 'q' as docid, 'taxes' as term, 1 as count
+			UNION 
+			SELECT 'q' as docid, 'treasury' as term, 1 as count
+		) a, (
+			SELECT * FROM frequency
+			UNION
+			SELECT 'q' as docid, 'washington' as term, 1 as count 
+			UNION
+			SELECT 'q' as docid, 'taxes' as term, 1 as count
+			UNION 
+			SELECT 'q' as docid, 'treasury' as term, 1 as count
+		) b
+		) X
+	WHERE X.ac = X.bc
+	GROUP BY X.ar, X.br
+	) Y
+WHERE Y.docid1 = 'q'
+AND Y.docid2 <> 'q'
+ORDER BY Y.simscore DESC
+LIMIT 1

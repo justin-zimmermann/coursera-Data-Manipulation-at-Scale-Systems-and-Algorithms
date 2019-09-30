@@ -1,0 +1,12 @@
+SELECT Y.simscore
+FROM (
+	SELECT SUM(X.av * X.bv) as simscore, X.ar as docid1, X.br as docid2
+	FROM (
+		SELECT a.count AS av, a.docid AS ar, a.term AS ac, b.count AS bv, b.docid AS br, b.term AS bc
+		FROM frequency a, frequency b
+		) X
+	WHERE X.ac = X.bc
+	GROUP BY X.ar, X.br
+	) Y
+WHERE Y.docid1 = '10080_txt_crude'
+AND Y.docid2 = '17035_txt_earn'

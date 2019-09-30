@@ -1,0 +1,12 @@
+SELECT Y.value
+FROM (
+	SELECT SUM(X.av * X.bv) as value, X.ar as row_num, X.bc as col_num
+	FROM (
+		SELECT a.value AS av, a.row_num AS ar, a.col_num AS ac, b.value AS bv, b.row_num AS br, b.col_num AS bc
+		FROM a, b
+		) X
+	WHERE X.ac = X.br
+	GROUP BY X.ar, X.bc
+	) Y
+WHERE Y.row_num = 2
+AND Y.col_num = 3
